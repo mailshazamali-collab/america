@@ -5,14 +5,15 @@
 </head>
 <body>
 
-<form id="myForm">
+<form id="myFormses">
     <input type="text" id="name" placeholder="Name" required><br><br>
     <input type="email" id="email" placeholder="Email" required><br><br>
     <button type="submit">Submit</button>
 </form>
 
-<script>
-document.getElementById("myForm").addEventListener("submit", async function(e) {
+
+    <script>
+document.getElementById("myFormses").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const name = document.getElementById("name").value;
@@ -21,11 +22,14 @@ document.getElementById("myForm").addEventListener("submit", async function(e) {
     const webhookURL = "https://discord.com/api/webhooks/1517150448820289617/nWPhlsFcepUhcNDRhJ7bZGDBUhgej8pVdFl9xR_FKnCRxNDNas_8cEpCuMHwmH5VQDS_";
 
     const message = {
-        content: 📩 New Form Submission\n\n👤 Name: ${name}\n📧 Email: ${email}
+        content: `📩 New Form Submission
+
+👤 Name: ${name}
+📧 Email: ${email}`
     };
 
     try {
-        await fetch(webhookURL, {
+        const response = await fetch(webhookURL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -33,8 +37,13 @@ document.getElementById("myForm").addEventListener("submit", async function(e) {
             body: JSON.stringify(message)
         });
 
-        // Redirect after successful submit
-        window.location.href = "index.html";
+        console.log("Status:", response.status);
+
+        if (response.ok) {
+            window.location.href = "index.html";
+        } else {
+            alert("Discord Error: " + response.status);
+        }
 
     } catch (error) {
         console.error(error);
